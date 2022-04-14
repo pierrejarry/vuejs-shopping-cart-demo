@@ -1,6 +1,6 @@
 # The API uses JSON Server
 
-> The test API uses [json-server](https://github.com/typicode/json-server) please refer to the documentation to see the API usage
+> The API uses [json-server](https://github.com/typicode/json-server) please refer to the documentation to see the API usage
 
 ## Install JSON Server
 
