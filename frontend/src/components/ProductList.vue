@@ -1,12 +1,15 @@
 <template>
   <div class="products">
       <h1>{{ title }}</h1>
-      <ul v-if="allProducts">
-          <li v-for="product in allProducts" :key="product.id">
-              {{ product.productName }}
-          </li>
-      </ul>
-      <div v-else>Loading...</div>
+      <p class="errorMessage" v-if="getErrorMessage">{{ getErrorMessage }}</p>
+      <div class="productsContainer" v-else>
+        <ul v-if="allProducts">
+            <li v-for="product in allProducts" :key="product.id">
+                {{ product.productName }}
+            </li>
+        </ul>
+        <div v-else>Loading...</div>
+      </div>
   </div>
 </template>
 
@@ -23,7 +26,7 @@ export default {
     methods: {
         ...mapActions(['fetchProducts']),
     },
-    computed: mapGetters(['allProducts']),
+    computed: mapGetters(['allProducts', 'getErrorMessage']),
     created() {
         this.fetchProducts()
     }

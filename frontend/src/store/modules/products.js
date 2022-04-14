@@ -1,11 +1,13 @@
 import axios from 'axios'
 
 const state = {
-    products: []
+    products: [],
+    errorMessage: null
 }
 
 const getters = {
-    allProducts: (state) =>  state.products.filter( product => product.stock > 0)
+    allProducts: state =>  state.products.filter( product => product.stock > 0),
+    getErrorMessage: state =>  state.errorMessage
 }
 
 const actions = {
@@ -15,13 +17,14 @@ const actions = {
             commit('SET_PRODUCTS', response.data);
         }
         catch (error) {
-            console.log(error)
+            commit('SET_ERROR', error);
         }
     },
 }
 
 const mutations = {
     SET_PRODUCTS: (state, products) => (state.products = products),
+    SET_ERROR: (state, error) => (state.errorMessage = error)
 }
 
 export default {
