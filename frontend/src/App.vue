@@ -17,11 +17,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-@import "./assets/css/_variables.scss";
-
-#app {
-  display: flex;
-}
-</style>
