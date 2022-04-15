@@ -3,7 +3,8 @@ import axios from 'axios'
 const state = {
     products: [],
     cart: [],
-    errorMessage: null
+    errorMessage: null,
+    favorites: []
 }
 
 const getters = {
@@ -87,6 +88,32 @@ const actions = {
                 state.cart.splice(index, 1);
               }
         }
+    },
+
+    async addProductToFavorites ({ commit }, product) {
+        if ( product.stock > 0) {
+            
+            await axios.patch(`http://localhost:3000/grocery/${product.id}`, 
+                {
+                    favorite: 1 
+                }
+            );
+
+            commit('PUSH_PRODUCT_TO_FAV', product.id);
+        }
+    },
+
+    async removeProductFromFavorites ({ commit }, product) {
+        if ( product.stock > 0) {
+            
+            await axios.patch(`http://localhost:3000/grocery/${product.id}`, 
+                {
+                    favorite: 0 
+                }
+            );
+            const index = state.favorites.indexOf(product);
+            commit('REMOVE_PRODUCT_TO_FAV', index);
+        }
     }
 }
 
@@ -97,7 +124,12 @@ const mutations = {
     INCREMENT_ITEM_QTY_CART: (state, cartItem) => cartItem.stock++,
     DECREMENT_ITEM_QTY_CART: (state, cartItem) => cartItem.stock--,
     INCREMENT_PRODUCT_INVENTORY: (state, product) => product.stock++,
-    DECREMENT_PRODUCT_INVENTORY: (state, product) => product.stock--
+    DECREMENT_PRODUCT_INVENTORY: (state, product) => product.stock--,
+    PUSH_PRODUCT_TO_FAV: (state, productId) => (state.favorites.push ({
+        id: productId,
+        favorite: 1
+    })),
+    REMOVE_PRODUCT_TO_FAV: (state, index) => (state.favorites.splice(index, 1))
 }
 
 export default {

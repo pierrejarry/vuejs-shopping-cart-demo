@@ -75,6 +75,15 @@ button {
             background: transparent;
             color: $body;
         }
+
+        &.secondary {
+            background: none;
+            color: $body;
+
+            &:hover {
+                background: $body
+            }
+        }
     }
 }
 
