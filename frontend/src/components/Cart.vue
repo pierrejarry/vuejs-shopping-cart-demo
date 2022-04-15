@@ -1,6 +1,14 @@
 <template>
   <div class="cart">
       <h1>{{ title }}</h1>
+        <ul class="cartList">
+            <li v-for="product in productsInCart" :key="product.id" class="fade-in-left">
+                <img :src="product.image_url" />
+                <div class="info">
+                    <p class="title spaceBetween">{{ product.productName }} <span class="price">{{ product.price }} &euro;</span></p>
+                </div>
+            </li>
+        </ul>
   </div>
 </template>
 
@@ -10,6 +18,13 @@ export default {
     data() {
         return {
             title: "Cart"
+        }
+    },
+    computed: {
+        productsInCart() {
+            return this.$store.getters.cartProducts.filter(function (item) {
+                return item.stock > 0
+            });
         }
     }
 }
@@ -27,6 +42,50 @@ export default {
     right: 0;
     top: 0;
     width: 25%;
+
+    ul {
+        li {
+            align-items: flex-start;
+            border-bottom: 1px solid $border;
+            display: flex;
+            padding: 10px 0;
+
+            img {
+                margin-right: 10px;
+                width: 60px;
+            }
+
+            .info {
+                align-items: flex-start;
+                display: flex;
+                flex-direction: column;
+
+                p {
+                    margin: 0;
+                }
+
+                .quantity {
+                    border: 1px solid $border;
+                    border-radius: 5px;
+                    display: flex;
+                    margin-top: 5px;
+                    padding: 5px;
+
+                    span {
+                        margin: 0 5px;
+                    }
+
+                    button {
+                        background: none;
+                        border: none;
+                        color: $body;
+                        cursor: pointer;
+                        padding: 0 5px;
+                    }
+                }
+            }
+        }
+    }
 }
 
 @media only screen and (max-width: 1024px) {

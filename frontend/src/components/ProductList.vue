@@ -1,7 +1,7 @@
 <template>
   <div class="products">
       <h1>{{ title }}</h1>
-      <p class="errorMessage" v-if="getErrorMessage">{{ getErrorMessage }}</p>
+      <p class="errorMessage" v-if="error">{{ error }}</p>
       <div class="productsContainer" v-else>
         <ul v-if="allProducts">
             <ProductItem
@@ -26,15 +26,23 @@ export default {
     },
     data() {
         return {
-            title: "Product list"
+            title: "Product list",
+            error: ""
         }
     },
     methods: {
         ...mapActions(['fetchProducts']),
+        async handleFetchProducts () {
+            try {
+                await this.fetchProducts()
+            } catch (error) {
+                this.error = error
+            }
+        }
     },
-    computed: mapGetters(['allProducts', 'getErrorMessage']),
+    computed: mapGetters(['allProducts']),
     created() {
-        this.fetchProducts()
+        this.handleFetchProducts()
     }
 }
 </script>
@@ -63,19 +71,6 @@ export default {
                 margin: 10px 5px;
                 padding: 10px;
                 width: calc(25% - 10px);
-            }
-        }
-
-        p {
-            &.title {
-                font-weight: 600;
-                text-align: left;
-            }
-
-            .price {
-                color: $price;
-                flex-shrink: 0;
-                margin-left: 10px;
             }
         }
 
