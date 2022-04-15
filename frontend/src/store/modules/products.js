@@ -17,6 +17,7 @@ const actions = {
         const response = await axios.get('http://localhost:3000/grocery')
         commit('SET_PRODUCTS', response.data);
     },
+
     async addProductToCart ({ commit }, product) {
         if ( product.stock > 0) {
             const cartItem = state.cart.find( item => item.id === product.id);
@@ -43,7 +44,43 @@ const actions = {
                 commit('SET_ERROR', error);
             }
         }
-    }
+    },
+
+    async incrementItemQuantityCart ({commit}, product) {
+        const cartItem = state.cart.find( item => item.id === product.id);
+        const productItem = state.products.find( item => item.id === product.id);
+        
+        commit('INCREMENT_ITEM_QTY_CART', cartItem);
+        commit('DECREMENT_PRODUCT_INVENTORY', productItem);
+
+        await axios.patch(`http://localhost:3000/grocery/${product.id}`, 
+            {
+                stock: productItem.stock 
+            }
+        );
+    },
+
+    async decrementItemQuantityCart ({commit}, product) {
+        const cartItem = state.cart.find( item => item.id === product.id);
+        const productItem = state.products.find( item => item.id === product.id);
+
+        commit('DECREMENT_ITEM_QTY_CART', cartItem);
+        commit('INCREMENT_PRODUCT_INVENTORY', productItem);
+
+        await axios.patch(`http://localhost:3000/grocery/${product.id}`, 
+            {
+                stock: productItem.stock 
+            }
+        );
+
+        // Remove item from Cart
+        if (cartItem.stock == 0) {
+            const index = state.cart.indexOf(cartItem);
+            if (index > -1) {
+                state.cart.splice(index, 1);
+              }
+        }
+    },
 }
 
 const mutations = {
@@ -51,6 +88,8 @@ const mutations = {
     SET_ERROR: (state, error) => (state.errorMessage = error),
     PUSH_PRODUCT_TO_CART: (state, productItem) => (state.cart.push (productItem)),
     INCREMENT_ITEM_QTY_CART: (state, cartItem) => cartItem.stock++,
+    DECREMENT_ITEM_QTY_CART: (state, cartItem) => cartItem.stock--,
+    INCREMENT_PRODUCT_INVENTORY: (state, product) => product.stock++,
     DECREMENT_PRODUCT_INVENTORY: (state, product) => product.stock--
 }
 
