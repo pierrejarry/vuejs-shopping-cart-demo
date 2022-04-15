@@ -6,6 +6,7 @@
                 <img :src="product.image_url" />
                 <div class="info">
                     <p class="title spaceBetween">{{ product.productName }} <span class="price">{{ product.price }} &euro;</span></p>
+                    <p>Stock: <span>{{ product.stock }} </span></p>
                 </div>
             </li>
         </ul>
