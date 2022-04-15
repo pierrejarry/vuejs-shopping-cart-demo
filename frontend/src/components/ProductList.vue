@@ -4,17 +4,11 @@
       <p class="errorMessage" v-if="getErrorMessage">{{ getErrorMessage }}</p>
       <div class="productsContainer" v-else>
         <ul v-if="allProducts">
-            <li v-for="product in allProducts" :key="product.id">
-                <img :src="product.image_url" />
-                <p class="title spaceBetween">
-                    {{ product.productName }} 
-                    <span class="price">{{ product.price }} &euro;</span>
-                </p>
-                <p>{{ product.productDescription }}</p>
-                <span class="bottom">
-                    <p>{{ product.stock }} left</p>
-                </span>
-            </li>
+            <ProductItem
+                v-for="product in allProducts" 
+                :key="product.id"
+                :product="product"
+            />
         </ul>
         <div v-else>Loading...</div>
       </div>
@@ -23,9 +17,13 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import ProductItem from './ProductItem.vue'
 
 export default {
     name: "ProductList",
+    components: {
+        ProductItem
+    },
     data() {
         return {
             title: "Product list"
@@ -49,7 +47,8 @@ export default {
         width: 75%;
 
         h1 {
-            margin: 0 5px;
+            margin-left: 5px;
+            margin-right: 5px;
         }
 
         ul {
