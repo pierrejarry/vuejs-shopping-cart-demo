@@ -1,5 +1,5 @@
 <template>
-  <div class="cart">
+  <div class="cart" :class="{ 'showMobile': showCart }">
         <h1>{{ title }}</h1>
         <p v-if="productsInCart.length == 0">{{ placeholder }}</p>
         <div class="cartContainer" v-else>
@@ -52,6 +52,9 @@ export default {
     },
     methods: {
         ...mapActions(['incrementItemQuantityCart', 'decrementItemQuantityCart'])
+    },
+    props: {
+        showCart: Boolean
     }
 }
 </script>
@@ -151,9 +154,11 @@ export default {
         display: none;
 
         &.showMobile {
+            background-color: $white;
             display: block;
             height: 100%;
             width: 100%;
+            z-index: 98;
         }
     }
 }

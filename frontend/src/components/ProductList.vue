@@ -133,6 +133,7 @@ export default {
         .products {
             ul {
                 li {
+                    margin: 0;
                     width: 100%;
                 }
             }
