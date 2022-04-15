@@ -9,7 +9,14 @@ const state = {
 const getters = {
     allProducts: state =>  state.products.filter( product => product.stock > 0),
     cartProducts: state => state.cart,
-    getErrorMessage: state =>  state.errorMessage
+    getErrorMessage: state =>  state.errorMessage,
+    cartTotal: (state, getters) => {
+        let total = 0;
+        getters.cartProducts.forEach(product => {
+            total += product.price * product.stock
+        })
+        return total
+    },
 }
 
 const actions = {
@@ -80,7 +87,7 @@ const actions = {
                 state.cart.splice(index, 1);
               }
         }
-    },
+    }
 }
 
 const mutations = {

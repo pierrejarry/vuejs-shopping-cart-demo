@@ -19,12 +19,16 @@
                     </div>
                 </li>
             </ul>
+            <div class="checkout">
+                <p class="spaceBetween">{{ total }} : <strong>{{ cartTotal }} &euro;</strong></p>
+                <button type="button" class="btn">{{ checkout }}</button>
+            </div>
         </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     name: "Cart",
@@ -32,10 +36,14 @@ export default {
         return {
             title: "Cart",
             placeholder: "Your cart is empty",
-            quantity: "Quantity"
+            quantity: "Quantity",
+            total: "Total",
+            checkout: "Checkout",
+            clear: "Clear Cart"
         }
     },
     computed: {
+        ...mapGetters(['cartTotal']),
         productsInCart() {
             return this.$store.getters.cartProducts.filter(function (item) {
                 return item.stock > 0
@@ -108,6 +116,24 @@ export default {
                         }
                     }
                 }
+            }
+
+            &:last-child {
+                border: none;
+            }
+        }
+    }
+
+    .checkout {
+        border-top: 1px solid $border;
+        margin-top: 20px;
+
+        p {
+            display: flex;
+            align-items: center;
+
+            strong {
+                font-size: 24px;
             }
         }
     }
