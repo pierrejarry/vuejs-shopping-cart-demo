@@ -76,9 +76,13 @@ export default {
     ul {
         li {
             align-items: flex-start;
+            border: none;
             border-bottom: 1px solid $border;
             display: flex;
+            flex-direction: row;
+            margin: 10px 0;
             padding: 10px 0;
+            width: 100%;
 
             img {
                 margin-right: 10px;
