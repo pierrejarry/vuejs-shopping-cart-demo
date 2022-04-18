@@ -46,8 +46,20 @@ p {
 }
 
 ul {
+    display: flex;
+    flex-wrap: wrap;
     list-style: none;
     padding: 0;
+
+    li {
+        border: 1px solid $border;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        margin: 10px 5px;
+        padding: 10px;
+        width: calc(25% - 10px);
+    }
 }
 
 .textCenter {
@@ -69,7 +81,7 @@ button {
         color: $white;
         padding: 10px 20px;
         transition: .5s all;
-        width: 100%;
+        
 
         &:hover {
             background: transparent;
@@ -84,7 +96,23 @@ button {
                 background: $body
             }
         }
+
+        &.fullWidth {
+            width: 100%;
+        }
     }
+}
+
+.fixedTop {
+    background: $white;
+    border-bottom: 1px solid $border;
+    position: fixed;
+    left: 0;
+    padding: 10px;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    z-index: 99;
 }
 
 /* ==============================*/

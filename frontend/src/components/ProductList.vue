@@ -8,6 +8,7 @@
                 v-for="product in allProducts" 
                 :key="product.id"
                 :product="product"
+                :isFavoritePage="isFavoritePage"
             />
         </ul>
         <div v-else>Loading...</div>
@@ -27,7 +28,8 @@ export default {
     data() {
         return {
             title: "Product list",
-            error: ""
+            error: "",
+            isFavoritePage: false
         }
     },
     methods: {
@@ -51,27 +53,13 @@ export default {
 @import "@/assets/css/_variables.scss";
 
     .products {
+        margin-top: 60px;
         padding: 10px;
         width: 75%;
 
         h1 {
             margin-left: 5px;
             margin-right: 5px;
-        }
-
-        ul {
-            display: flex;
-            flex-wrap: wrap;
-
-            li {
-                border: 1px solid $border;
-                border-radius: 5px;
-                display: flex;
-                flex-direction: column;
-                margin: 10px 5px;
-                padding: 10px;
-                width: calc(25% - 10px);
-            }
         }
 
         .bottom {

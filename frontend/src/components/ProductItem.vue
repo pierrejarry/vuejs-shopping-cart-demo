@@ -1,20 +1,20 @@
 <template>
-    <li>
+    <li v-if="!isFavoritePage || (isFavoritePage && product.favorite === 1)">
         <img :src="product.image_url" />
         <p class="title spaceBetween">
             {{ product.productName }} 
             <span class="price">{{ product.price }} &euro;</span>
         </p>
-        <button type="button" class="favBtn add" @click="handleAddToFavorites(product)" v-if="isFavorite==0">
+        <button type="button" class="favBtn add" @click="handleFavorites(product)" v-if="!isFavoritePage && product.favorite === 0">
             <img src="./../assets/images/heart_green.svg" alt="Add to favorites" class="favImg"> {{ addFavorites }}
         </button>
-        <button type="button" class="favBtn remove" @click="handleRemoveFromFavorites(product)" v-else>
+        <button type="button" class="favBtn remove" @click="handleFavorites(product)" v-else>
             <img src="./../assets/images/heart_red.svg" alt="Remove from favorites" class="favImg"> {{ removeFavorites }}
         </button>
         <p>{{ product.productDescription }}</p>
         <div class="bottom">
             <p class="textCenter">{{ product.stock }} left</p>
-            <button type="button" class="btn" @click="handleAddProduct(product)">{{ btn }}</button>
+            <button type="button" class="btn fullWidth" @click="handleAddProduct(product)">{{ btn }}</button>
             <p class="errorMessage" v-if="showErrorMessage">{{ getErrorMessage }}</p>
             {{ error }}
         </div>
@@ -32,40 +32,29 @@ export default {
           btn: "Add to Cart",
           error: "",
           showErrorMessage: false,
-          isFavorite: this.product.favorite,
           addFavorites: "Add to favorites",
           removeFavorites: "Remove from favorites"
       }
   },
   props: {
-    product: Object
+    product: Object,
+    isFavoritePage: Boolean
   },
   computed: mapGetters(['getErrorMessage']),
   methods: {
-    ...mapActions(['addProductToCart', 'addProductToFavorites', 'removeProductFromFavorites']),
+    ...mapActions(['addProductToCart', 'addRemoveProductFromFavorites']),
     async handleAddProduct(p) {
         await this.addProductToCart(p);
         if (this.product.id === p.id && this.getErrorMessage) {
             this.showErrorMessage = true;
         }
     },
-    async handleAddToFavorites(product) {
+    async handleFavorites(product) {
         try {
-            await this.addProductToFavorites(product);
+            await this.addRemoveProductFromFavorites(product);
         } catch (error) {
             this.error = error
-        }
-        
-        this.isFavorite = 1;
-    },
-    async handleRemoveFromFavorites(product) {
-        try {
-            await this.removeProductFromFavorites(product);
-        } catch (error) {
-            this.error = error
-        }
-        
-        this.isFavorite = 0;
+        }        
     }
   }
 }

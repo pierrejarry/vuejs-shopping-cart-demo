@@ -21,7 +21,7 @@
             </ul>
             <div class="checkout">
                 <p class="spaceBetween">{{ total }} : <strong>{{ cartTotal }} &euro;</strong></p>
-                <button type="button" class="btn">{{ checkout }}</button>
+                <button type="button" class="btn fullWidth">{{ checkout }}</button>
             </div>
         </div>
   </div>
@@ -65,6 +65,7 @@ export default {
 .cart {
     border-left: 1px solid $border;
     height: 100vh;
+    margin-top: 60px;
     overflow-y: auto;
     padding: 10px;
     position: fixed;
