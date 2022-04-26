@@ -11,9 +11,9 @@
                         <div class="quantityContainer">
                             <p>{{ quantity }}:</p>
                             <div class="quantity">
-                                <button type="button" @click="decrementItemQuantityCart(product)">-</button>
+                                <button type="button" @click="decrementItemQuantityCart(product.id)">-</button>
                                 <span>{{ product.stock }}</span>
-                                <button type="button" @click="incrementItemQuantityCart(product)">+</button>
+                                <button type="button" @click="incrementItemQuantityCart(product.id)">+</button>
                             </div>
                         </div>
                     </div>
@@ -23,6 +23,7 @@
                 <p class="spaceBetween">{{ total }} : <strong>{{ cartTotal }} &euro;</strong></p>
                 <button type="button" class="btn fullWidth">{{ checkout }}</button>
             </div>
+            <p class="errorMessage" v-if="getErrorMessage">{{ getErrorMessage }}</p>
         </div>
   </div>
 </template>
@@ -43,7 +44,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['cartTotal']),
+        ...mapGetters(['cartTotal', 'getErrorMessage']),
         productsInCart() {
             return this.$store.getters.cartProducts.filter(function (item) {
                 return item.stock > 0
@@ -51,7 +52,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['incrementItemQuantityCart', 'decrementItemQuantityCart'])
+        ...mapActions(['decrementItemQuantityCart', 'incrementItemQuantityCart'])
     },
     props: {
         showCart: Boolean

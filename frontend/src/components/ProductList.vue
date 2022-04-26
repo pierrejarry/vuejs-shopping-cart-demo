@@ -10,8 +10,8 @@
                 :product="product"
                 :isFavoritePage="isFavoritePage"
             />
-        </ul>
-        <div v-else>Loading...</div>
+        </ul>     
+        <p v-else>Loading...</p>
       </div>
   </div>
 </template>

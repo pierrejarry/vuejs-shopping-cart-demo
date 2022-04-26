@@ -40,20 +40,21 @@ const actions = {
     async addProductToCart ({ commit }, product) {
         if ( product.stock > 0) {
             const cartItem = state.cart.find( item => item.id === product.id);
+            
             const productItem = {
-                id: product.id,
-                image_url: product.image_url,
-                stock: 1,
-                productName: product.productName,
-                price: product.price,
-                productDescription: product.productDescription,
-                favorite: product.favorite 
+                ...product,
+                stock: product.stock - 1
+            }
+
+            const newCartItem = {
+                ...product,
+                stock: 1
             }
 
             try {
                 await axios.patch(`http://localhost:3000/grocery/${product.id}`, productItem);
                 if (!cartItem) {
-                    commit('PUSH_PRODUCT_TO_CART', productItem);
+                    commit('PUSH_PRODUCT_TO_CART', newCartItem);
                 } else {
                     commit('INCREMENT_ITEM_QTY_CART', cartItem);
                 }
@@ -64,34 +65,43 @@ const actions = {
             }
         }
     },
+    async incrementItemQuantityCart ({commit}, productId) {
+        const cartItem = state.cart.find( item => item.id === productId);
+        const productItem = state.products.find( item => item.id === productId);
 
-    async incrementItemQuantityCart ({commit}, product) {
-        const cartItem = state.cart.find( item => item.id === product.id);
-        const productItem = state.products.find( item => item.id === product.id);
-        
-        commit('INCREMENT_ITEM_QTY_CART', cartItem);
-        commit('DECREMENT_PRODUCT_INVENTORY', productItem);
+        try {
+            await axios.patch(`http://localhost:3000/grocery/${productId}`, 
+                {
+                    stock: productItem.stock - 1
+                }
+            );
 
-        await axios.patch(`http://localhost:3000/grocery/${product.id}`, 
-            {
-                stock: productItem.stock 
-            }
-        );
+            commit('INCREMENT_ITEM_QTY_CART', cartItem);
+            commit('DECREMENT_PRODUCT_INVENTORY', productItem);
+        }
+        catch (error) {
+            state.errorMessage = null;
+            commit('SET_ERROR', error);
+        }
     },
+    async decrementItemQuantityCart ({commit}, productId) {
+        const cartItem = state.cart.find( item => item.id === productId);
+        const productItem = state.products.find( item => item.id === productId);
 
-    async decrementItemQuantityCart ({commit}, product) {
-        const cartItem = state.cart.find( item => item.id === product.id);
-        const productItem = state.products.find( item => item.id === product.id);
-
-        commit('DECREMENT_ITEM_QTY_CART', cartItem);
-        commit('INCREMENT_PRODUCT_INVENTORY', productItem);
-
-        await axios.patch(`http://localhost:3000/grocery/${product.id}`, 
-            {
-                stock: productItem.stock 
-            }
-        );
-
+        try {
+            await axios.patch(`http://localhost:3000/grocery/${productId}`, 
+                {
+                    stock: productItem.stock + 1
+                }
+            );
+            commit('DECREMENT_ITEM_QTY_CART', cartItem);
+            commit('INCREMENT_PRODUCT_INVENTORY', productItem);
+        }
+        catch(error) {
+            state.errorMessage = null;
+            commit('SET_ERROR', error);
+        }
+        
         // Remove item from Cart
         if (cartItem.stock == 0) {
             const index = state.cart.indexOf(cartItem);
